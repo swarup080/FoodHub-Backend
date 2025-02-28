@@ -1,24 +1,21 @@
-
 plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.ktor)
+    application
 }
 
 group = "com.swarup.foodhab"
 version = "0.0.1"
 
 application {
-    mainClass = "com.swarup.foodhab.ApplicationKt"
+    mainClass.set("com.swarup.foodhab.ApplicationKt")
 
-    val isDevelopment: Boolean = project.ext.has("development")
+    val isDevelopment: Boolean = project.hasProperty("development")
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
 }
 
 repositories {
     mavenCentral()
-}
-tasks.create("stage"){
-    dependsOn("installDist")
 }
 
 dependencies {
@@ -31,4 +28,11 @@ dependencies {
     testImplementation(libs.kotlin.test.junit)
     implementation("org.ktorm:ktorm-core:4.1.1")
     implementation("com.mysql:mysql-connector-j:9.2.0")
+}
+
+// Create Fat JAR (Shadow JAR)
+tasks.withType<Jar> {
+    manifest {
+        attributes["Main-Class"] = "com.swarup.foodhab.ApplicationKt"
+    }
 }
