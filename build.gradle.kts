@@ -17,6 +17,9 @@ application {
 repositories {
     mavenCentral()
 }
+tasks.create("stage"){
+    dependsOn("installDist")
+}
 
 dependencies {
     implementation(libs.ktor.server.content.negotiation)
